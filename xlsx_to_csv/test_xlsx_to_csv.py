@@ -1,7 +1,6 @@
 import unittest
 import os
-from xlsx_to_csv import xlsx_to_csv
-
+from xlsx_to_csv import xlsx_to_csv, find_all_xlsx, change_ext_to_csv
 
 class TestXlsxToCsv(unittest.TestCase):
     def setUp(self):
@@ -11,6 +10,13 @@ class TestXlsxToCsv(unittest.TestCase):
             os.path.dirname(__file__), 'test-data', 'test.csv')
         self.tmp_path = os.path.join(
             os.path.dirname(__file__), 'test-data', 'tmp.csv')
+    
+    def test_glob(self):
+        test_xlsx_list = find_all_xlsx(os.path.dirname(__file__))
+        self.assertEqual(test_xlsx_list, [self.excel_path])
+
+    def test_name_conversion(self):
+        self.assertEqual(change_ext_to_csv(self.excel_path), self.csv_path)
 
     def test_conversion(self):
         xlsx_to_csv(self.excel_path, self.tmp_path)
@@ -20,7 +26,8 @@ class TestXlsxToCsv(unittest.TestCase):
                          tmp_file.read())
 
     def tearDown(self):
-        os.remove(self.tmp_path)
+        if os.path.exists(self.tmp_path):
+            os.remove(self.tmp_path)
 
 
 if __name__ == "__main__":
