@@ -21,8 +21,7 @@ def convert_all_xlsx(xlsx_list):
 
 def main(directory):
     xlsx_list = find_all_xlsx(directory)
-    print(xlsx_list)
-    #convert_all_xlsx(xlsx_list)
+    convert_all_xlsx(xlsx_list)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Convert excel files to csv")
