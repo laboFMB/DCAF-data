@@ -1,0 +1,15 @@
+#! /usr/bin/bash
+
+folder=$1
+file_list=$(find $folder -name "*intensity*")
+for file in $file_list
+do
+    mv $file "${file/intensity/Intensity}"
+done
+
+folder=$1
+file_list=$(find $folder -name "*volcanoplot*")
+for file in $file_list
+do
+    mv $file "${file/volcanoplot/VolcanoPlot}"
+done

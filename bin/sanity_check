@@ -1,0 +1,37 @@
+directory=$1
+
+echo "Missing SaintScore Files"
+for protein in $(ls $directory)
+do
+    files=$(find ${directory}/${protein}/IP -name "*SaintScore*.xlsx")
+    if [ -z "$files" ]
+    then
+      echo $protein
+    fi
+done
+
+echo "Missing Intensity Files"
+for protein in $(ls $directory)
+do
+    files=$(find ${directory}/${protein}/IP -name "*Intensity.xlsx")
+    if [ -z "$files" ]
+    then
+      echo $protein
+    fi
+done
+
+echo "Missing VolcanoPlot Files"
+for protein in $(ls $directory)
+do
+    files=$(find ${directory}/${protein}/PULSE -name "*VolcanoPlot.xlsx")
+    if [ -z "$files" ]
+    then
+      echo $protein
+    fi
+done
+
+echo "Wrong File Type"
+for file in $(find $directory -wholename "**/*.txt")
+do
+    echo $file
+done
