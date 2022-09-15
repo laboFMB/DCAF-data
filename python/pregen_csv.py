@@ -56,6 +56,7 @@ def generate_volcano_df(volcano_file):
     volcano_df.columns.values[2] = "pvalue"
 
     gene_name = volcano_df["Gene_names"]
+    print(gene_name)
     log_2_fc = volcano_df['log2FC'].round(3)
     p_value = volcano_df['pvalue'].round(3)
 
@@ -63,7 +64,8 @@ def generate_volcano_df(volcano_file):
 
 
 def write_csv(df, filepath):
-    df.to_csv(filepath, index=True, header=True)
+    pass
+    #df.to_csv(filepath, index=True, header=True)
 
 
 def generate_csv_path(filepath, filename):
