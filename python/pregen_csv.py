@@ -55,8 +55,11 @@ def generate_volcano_df(volcano_file):
     volcano_df.columns.values[1] = "log2FC"
     volcano_df.columns.values[2] = "pvalue"
 
+    volcano_df['replacement_name'] = volcano_df['Protein_IDs'].apply(
+        lambda x: x.split(';')[0])
+    volcano_df.loc[volcano_df.Gene_names.isnull(),
+                   'Gene_names'] = volcano_df.loc[volcano_df.Gene_names.isnull(), 'replacement_name']
     gene_name = volcano_df["Gene_names"]
-    print(gene_name)
     log_2_fc = volcano_df['log2FC'].round(3)
     p_value = volcano_df['pvalue'].round(3)
 
@@ -64,8 +67,7 @@ def generate_volcano_df(volcano_file):
 
 
 def write_csv(df, filepath):
-    pass
-    #df.to_csv(filepath, index=True, header=True)
+    df.to_csv(filepath, index=True, header=True)
 
 
 def generate_csv_path(filepath, filename):
