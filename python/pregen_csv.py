@@ -45,7 +45,7 @@ def generate_saint_df(saint_file):
     bait = saint_df['Bait'].replace('^X', '', regex=True)
     prey_gene = saint_df['PreyGene'].str.upper()
     saint_score = saint_df['SaintScore']
-    log_2_fc = safe_log2(saint_df['FoldChange']).round(3)
+    log_2_fc = safe_log2(saint_df['FoldChange'])
 
     return pd.DataFrame({"Bait": bait, "Prey Gene": prey_gene, "Saint Score": saint_score, "log2FC": log_2_fc})
 
@@ -60,8 +60,8 @@ def generate_volcano_df(volcano_file):
     volcano_df.loc[volcano_df.Gene_names.isnull(),
                    'Gene_names'] = volcano_df.loc[volcano_df.Gene_names.isnull(), 'replacement_name']
     gene_name = volcano_df["Gene_names"]
-    log_2_fc = volcano_df['log2FC'].round(3)
-    p_value = volcano_df['pvalue'].round(3)
+    log_2_fc = volcano_df['log2FC']
+    p_value = volcano_df['pvalue']
 
     return pd.DataFrame({"Gene Name": gene_name, "log2(Fold change)": log_2_fc, "P-value": p_value})
 
