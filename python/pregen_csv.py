@@ -3,6 +3,7 @@ import glob
 import os
 import pandas as pd
 import numpy as np
+import traceback
 
 
 def glob_pattern(directory, pattern):
@@ -18,7 +19,7 @@ def find_all_intensity_xlsx(directory):
 
 
 def find_all_volcanoplot_xlsx(directory):
-    return sorted(glob_pattern(directory, '**/*VolcanoPlot.xlsx'))
+    return sorted(glob_pattern(directory, '**/*volcanoplot.xlsx'))
 
 
 def safe_log2(array):
@@ -51,19 +52,25 @@ def generate_saint_df(saint_file):
 
 
 def generate_volcano_df(volcano_file):
-    volcano_df = pd.read_excel(volcano_file, skiprows=2)
+    volcano_df = pd.read_excel(volcano_file, sheet_name="Feature Meta Data")
     volcano_df.columns.values[1] = "log2FC"
     volcano_df.columns.values[2] = "pvalue"
 
-    volcano_df['replacement_name'] = volcano_df['Protein_IDs'].apply(
-        lambda x: x.split(';')[0])
-    volcano_df.loc[volcano_df.Gene_names.isnull(),
-                   'Gene_names'] = volcano_df.loc[volcano_df.Gene_names.isnull(), 'replacement_name']
-    gene_name = volcano_df["Gene_names"]
-    log_2_fc = volcano_df['log2FC']
-    p_value = volcano_df['pvalue']
+    try:
+        volcano_df['replacement_name'] = volcano_df['Protein_IDs'].apply(
+            lambda x: x.split(';')[0])
+        volcano_df.loc[volcano_df.Gene_names.isnull(),
+                       'Gene_names'] = volcano_df.loc[volcano_df.Gene_names.isnull(), 'replacement_name']
+        gene_name = volcano_df["Gene_names"]
+        log_2_fc = volcano_df['log2FC']
+        p_value = volcano_df['pvalue']
 
-    return pd.DataFrame({"Gene Name": gene_name, "log2(Fold change)": log_2_fc, "P-value": p_value})
+        return pd.DataFrame({"Gene Name": gene_name, "log2(Fold change)": log_2_fc, "P-value": p_value})
+    except Exception:
+        print("Error in {}".format(volcano_file))
+        print("Columns: {}".format(volcano_df.columns))
+        print(traceback.format_exc())
+        exit(1)
 
 
 def write_csv(df, filepath):
